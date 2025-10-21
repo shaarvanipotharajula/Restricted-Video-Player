@@ -4,10 +4,10 @@ import sampleVideo from './sample.mp4';
 
 function App() {
   const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -24,60 +24,64 @@ function App() {
     };
   }, []);
 
+  const togglePlay = () => {
+    const video = videoRef.current;
+    if (isPlaying) {
+      video.pause();
+    } else {
+      video.muted = false;
+      video.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleVolumeChange = (e) => {
+    const video = videoRef.current;
+    const newVolume = parseFloat(e.target.value);
+    video.volume = newVolume;
+    setVolume(newVolume);
+  };
+
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
-    return `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
-  };
-
-  const playVideo = () => {
-    const video = videoRef.current;
-    video.muted = false; // Enable sound
-    video.play();
-    setIsPlaying(true);
-  };
-
-  const pauseVideo = () => {
-    const video = videoRef.current;
-    video.pause();
-    setIsPlaying(false);
-  };
-
-  const increaseVolume = () => {
-    const video = videoRef.current;
-    let newVolume = Math.min(video.volume + 0.1, 1);
-    video.volume = newVolume;
-    setVolume(newVolume);
-  };
-
-  const decreaseVolume = () => {
-    const video = videoRef.current;
-    let newVolume = Math.max(video.volume - 0.1, 0);
-    video.volume = newVolume;
-    setVolume(newVolume);
+    return `${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
   };
 
   return (
-    <div className="App">
-      <h1>Restricted Video Player</h1>
-      <div className="video-container">
+    <div className="app">
+      <div className="video-player">
         <video
           ref={videoRef}
           src={sampleVideo}
-          controls={false} // hide default controls
-          style={{ width: '80%', maxWidth: '800px' }}
+          controls={false}
+          onClick={togglePlay}
+          onContextMenu={(e) => e.preventDefault()} // disable right-click
         />
-        <div className="controls">
-          {!isPlaying ? (
-            <button onClick={playVideo}>▶ Play</button>
-          ) : (
-            <button onClick={pauseVideo}>⏸ Pause</button>
-          )}
-          <button onClick={decreaseVolume}>- Volume</button>
-          <button onClick={increaseVolume}>+ Volume</button>
-          <span>
-            {formatTime(currentTime)} / {formatTime(duration)}
-          </span>
+
+        {/* Overlay controls */}
+        <div className="controls-overlay">
+          <div className="controls-left">
+            <button className="play-btn" onClick={togglePlay}>
+              {isPlaying ? '❚❚' : '▶'}
+            </button>
+            <div className="volume-container">
+              <span>🔊</span>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={volume}
+                onChange={handleVolumeChange}
+              />
+            </div>
+            <div className="time-display">
+              {formatTime(currentTime)} / {formatTime(duration)}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -85,3 +89,4 @@ function App() {
 }
 
 export default App;
+
