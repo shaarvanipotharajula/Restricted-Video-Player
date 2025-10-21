@@ -1,67 +1,91 @@
-.App {
-  text-align: center;
-  margin-top: 40px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f9f9f9;
-  min-height: 100vh;
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-h1 {
-  color: #222;
-  margin-bottom: 20px;
-}
-
-.video-container {
+.app {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 15px;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  height: 100vh;
+}
+
+.video-player {
+  position: relative;
   width: 80%;
-  max-width: 800px;
-  margin: auto;
+  max-width: 900px;
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 video {
+  width: 100%;
+  height: auto;
   border-radius: 8px;
-  background-color: black;
-}
-
-.controls {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-button {
-  padding: 10px 18px;
-  font-size: 15px;
-  border: none;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #007bff, #0056d2);
-  color: white;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
+/* Control bar */
+.controls-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: opacity 0.3s ease;
 }
 
-button:active {
-  transform: scale(0.97);
+.controls-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-span {
-  font-weight: 500;
-  color: #333;
-  background: #f1f1f1;
-  padding: 8px 12px;
-  border-radius: 5px;
+/* Play/Pause button */
+.play-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.1s;
 }
+.play-btn:hover {
+  transform: scale(1.2);
+}
+
+/* Volume */
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.volume-container span {
+  font-size: 18px;
+}
+.volume-container input[type='range'] {
+  width: 100px;
+  accent-color: red;
+  cursor: pointer;
+}
+
+/* Time display */
+.time-display {
+  font-size: 14px;
+  color: #ddd;
+}
+
+/* Hide controls when mouse is not moving (optional enhancement) */
+.video-player:hover .controls-overlay {
+  opacity: 1;
+}
+
